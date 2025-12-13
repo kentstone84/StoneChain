@@ -3,7 +3,7 @@
 Build a Simple Chatbot
 ======================
 
-Complete example of building a chatbot with SimpleChain.
+Complete example of building a chatbot with StoneChain.
 """
 
 import os
@@ -11,7 +11,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from simplechain import Anthropic, Conversation, Tool, Agent
+from stonechain import Anthropic, Conversation, Tool, Agent
 
 
 def simple_chatbot():
@@ -56,7 +56,7 @@ Rules:
 - Always speak like a pirate (use "arr", "matey", "ye", etc.)
 - Be helpful but stay in character
 - Keep responses under 3 sentences
-- Occasionally mention your ship, the "SS SimpleChain"
+- Occasionally mention your ship, the "SS StoneChain"
 """
     )
     
@@ -137,12 +137,11 @@ def chatbot_with_context():
     print("=" * 50)
     print("Contextual Chatbot")
     print("=" * 50)
-    print("Ask me about SimpleChain!")
+    print("Ask me about StoneChain!")
     print("Type 'quit' to exit.\n")
     
-    # Context about SimpleChain
     context = """
-SimpleChain is a zero-dependency LLM framework created by Kent Stone in December 2025.
+StoneChain is a zero-dependency LLM framework created by Kent Stone in December 2025.
 
 Key features:
 - Zero external dependencies (pure Python stdlib)
@@ -150,27 +149,27 @@ Key features:
 - Supports multiple providers: Anthropic, OpenAI, Groq, Mistral, DeepSeek, Ollama
 - Features include: Chain, Router, Agent, RAG, Memory, Parallel execution
 
-SimpleChain was created as a response to LangChain's complexity. While LangChain has 
-200+ dependencies and 100,000+ lines of code, SimpleChain does the same in one file.
+StoneChain was created as a response to LangChain's complexity. While LangChain has 
+200+ dependencies and 100,000+ lines of code, StoneChain does the same in one file.
 
-Installation is simple: just copy simplechain.py to your project. No pip install needed.
+Installation is simple: just copy stonechain.py to your project. No pip install needed.
 
-The philosophy is: "Zero dependencies. Zero excuses. Just works."
+The philosophy is: "Built like a rock. Zero dependencies. Zero excuses."
 """
     
     llm = Anthropic()
     conv = Conversation(
         llm,
-        system=f"""You are a helpful assistant that answers questions about SimpleChain.
+        system=f"""You are a helpful assistant that answers questions about StoneChain.
 
-Here is information about SimpleChain:
+Here is information about StoneChain:
 {context}
 
 Rules:
 - Answer based on the provided context
 - If you don't know, say so
 - Keep responses concise
-- Be enthusiastic about SimpleChain!
+- Be enthusiastic about StoneChain!
 """
     )
     

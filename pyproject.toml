@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "simplechain"
+name = "stonechain"
 version = "1.0.0"
-description = "Zero-dependency LLM framework. LangChain in 800 lines."
+description = "Zero-dependency LLM framework. LangChain in 800 lines. Built like a rock."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -30,6 +30,7 @@ keywords = [
     "chain",
     "agent",
     "rag",
+    "zero-dependency",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -43,12 +44,11 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 requires-python = ">=3.8"
-dependencies = []  # ZERO DEPENDENCIES
+dependencies = []  # ZERO DEPENDENCIES - BUILT LIKE A ROCK
 
 [project.optional-dependencies]
 dev = [
@@ -57,16 +57,16 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/KentStone/simplechain"
-Documentation = "https://github.com/KentStone/simplechain#readme"
-Repository = "https://github.com/KentStone/simplechain"
-Issues = "https://github.com/KentStone/simplechain/issues"
+Homepage = "https://github.com/KentStone/stonechain"
+Documentation = "https://github.com/KentStone/stonechain#readme"
+Repository = "https://github.com/KentStone/stonechain"
+Issues = "https://github.com/KentStone/stonechain/issues"
 
 [project.scripts]
-simplechain = "simplechain.simplechain:main"
+stonechain = "stonechain.stonechain:main"
 
 [tool.setuptools]
-packages = ["simplechain"]
+packages = ["stonechain"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-SimpleChain vs LangChain Benchmark
-==================================
+StoneChain vs LangChain Benchmark
+=================================
 
 Compare startup time, memory usage, and code complexity.
 
@@ -56,23 +56,6 @@ def count_dependencies(package_name: str) -> int:
     return -1
 
 
-def get_package_size(package_name: str) -> str:
-    """Get installed size of a package."""
-    try:
-        result = subprocess.run(
-            [sys.executable, "-m", "pip", "show", "-f", package_name],
-            capture_output=True,
-            text=True
-        )
-        # Count lines in file list as rough size indicator
-        lines = result.stdout.split("\n")
-        file_count = sum(1 for l in lines if l.strip() and not l.startswith(" "))
-        return f"~{file_count} files"
-    except:
-        pass
-    return "unknown"
-
-
 def count_lines(filepath: str) -> int:
     """Count lines in a file."""
     try:
@@ -84,24 +67,23 @@ def count_lines(filepath: str) -> int:
 
 def main():
     print("=" * 70)
-    print("SimpleChain vs LangChain Benchmark")
+    print("StoneChain vs LangChain Benchmark")
     print("=" * 70)
     
-    # Get simplechain path
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    simplechain_path = os.path.join(script_dir, "simplechain.py")
+    stonechain_path = os.path.join(script_dir, "stonechain.py")
     
     print("\n1. CODE COMPLEXITY")
     print("-" * 40)
     
-    sc_lines = count_lines(simplechain_path)
-    print(f"SimpleChain:  {sc_lines:,} lines (1 file)")
+    sc_lines = count_lines(stonechain_path)
+    print(f"StoneChain:   {sc_lines:,} lines (1 file)")
     print(f"LangChain:    ~100,000+ lines (500+ files)")
     
     print("\n2. DEPENDENCIES")
     print("-" * 40)
     
-    print(f"SimpleChain:  0 dependencies (pure stdlib)")
+    print(f"StoneChain:   0 dependencies (pure stdlib)")
     
     lc_deps = count_dependencies("langchain")
     if lc_deps >= 0:
@@ -112,13 +94,13 @@ def main():
     print("\n3. IMPORT TIME")
     print("-" * 40)
     
-    # SimpleChain import
+    # StoneChain import
     sc_import = f"""
 import sys
 sys.path.insert(0, '{script_dir}')
-from simplechain import Anthropic, Chain, Agent, RAG
+from stonechain import Anthropic, Chain, Agent, RAG
 """
-    sc_time = measure_import_time("simplechain", sc_import)
+    sc_time = measure_import_time("stonechain", sc_import)
     
     # LangChain import
     lc_import = """
@@ -129,9 +111,9 @@ from langchain.agents import create_react_agent
     lc_time = measure_import_time("langchain", lc_import)
     
     if sc_time > 0:
-        print(f"SimpleChain:  {sc_time:.0f}ms")
+        print(f"StoneChain:   {sc_time:.0f}ms")
     else:
-        print(f"SimpleChain:  <50ms (estimated)")
+        print(f"StoneChain:   <50ms (estimated)")
     
     if lc_time > 0:
         print(f"LangChain:    {lc_time:.0f}ms")
@@ -141,13 +123,13 @@ from langchain.agents import create_react_agent
     print("\n4. INSTALL SIZE")
     print("-" * 40)
     
-    print(f"SimpleChain:  ~36KB (single file)")
+    print(f"StoneChain:   ~36KB (single file)")
     print(f"LangChain:    ~50MB+ (with dependencies)")
     
     print("\n5. LEARNING CURVE")
     print("-" * 40)
     
-    print(f"SimpleChain:  Read in 30 minutes")
+    print(f"StoneChain:   Read in 30 minutes")
     print(f"LangChain:    Days to understand abstractions")
     
     print("\n" + "=" * 70)
@@ -156,7 +138,7 @@ from langchain.agents import create_react_agent
     
     print("""
 ┌─────────────────┬──────────────┬──────────────────┐
-│ Metric          │ SimpleChain  │ LangChain        │
+│ Metric          │ StoneChain   │ LangChain        │
 ├─────────────────┼──────────────┼──────────────────┤
 │ Dependencies    │ 0            │ 200+             │
 │ Install Size    │ 36KB         │ 50MB+            │
@@ -167,8 +149,8 @@ from langchain.agents import create_react_agent
 └─────────────────┴──────────────┴──────────────────┘
 """)
     
-    print("Winner: SimpleChain 🏆")
-    print("\nZero dependencies. Zero excuses. Just works.")
+    print("Winner: StoneChain 🪨")
+    print("\nBuilt like a rock. Zero dependencies. Zero excuses.")
 
 
 if __name__ == "__main__":

@@ -1,8 +1,9 @@
 """
-SimpleChain - Zero Dependency LLM Framework
+StoneChain - Zero Dependency LLM Framework
+Built like a rock.
 """
 
-from .simplechain import (
+from .stonechain import (
     # Version
     __version__,
     __author__,
@@ -16,7 +17,7 @@ from .simplechain import (
     Document,
     
     # Exceptions
-    SimpleChainError,
+    StoneChainError,
     APIError,
     ConfigError,
     
@@ -64,7 +65,7 @@ __all__ = [
     "Document",
     
     # Exceptions
-    "SimpleChainError",
+    "StoneChainError",
     "APIError",
     "ConfigError",
     

@@ -1,8 +1,8 @@
-# SimpleChain Launch Checklist
+# StoneChain Launch Checklist
 
 ## Pre-Launch
 
-- [x] Core library (simplechain.py)
+- [x] Core library (stonechain.py)
 - [x] Package setup (pyproject.toml, __init__.py)
 - [x] README with badges
 - [x] LICENSE (MIT)
@@ -23,7 +23,7 @@
 
 ## GitHub Setup
 
-1. Create repo: `github.com/KentStone/simplechain`
+1. Create repo: `github.com/KentStone/stonechain`
 2. Push code
 3. Add topics: `llm`, `langchain`, `ai`, `python`, `zero-dependencies`
 4. Create release v1.0.0
@@ -37,12 +37,12 @@
 ### Twitter/X Thread
 
 ```
-🔥 Introducing SimpleChain - The LangChain Killer
+🪨 Introducing StoneChain - The LangChain Killer
 
 LangChain: 200+ dependencies, 50MB, 100K+ lines
-SimpleChain: ZERO dependencies, 36KB, 800 lines
+StoneChain: ZERO dependencies, 36KB, 800 lines
 
-Same features. No bloat. Just works.
+Same features. No bloat. Built like a rock.
 
 🧵 Thread:
 ```
@@ -62,7 +62,7 @@ I built an alternative. In ONE FILE.
 ```
 
 ```
-2/ SimpleChain Features:
+2/ StoneChain Features:
 
 ✅ All major providers (Claude, GPT, Groq, Mistral, DeepSeek, Ollama)
 ✅ Chains - sequential LLM calls
@@ -91,7 +91,7 @@ That's it. No requests. No httpx. Nothing.
 4/ Quick Start:
 
 ```python
-from simplechain import Anthropic
+from stonechain import Anthropic
 
 llm = Anthropic()
 print(llm("Hello!"))
@@ -101,23 +101,20 @@ That's the entire setup. No config files. No abstractions.
 ```
 
 ```
-5/ Chains:
+5/ Why "StoneChain"?
 
-```python
-chain = Chain(llm)
-chain.add("analyze", "Analyze: {input}", "analysis")
-chain.add("summarize", "Summarize: {analysis}", "summary")
-result = chain.run(input="AI trends")
-```
+🪨 Stone - Built solid. No flaky dependencies.
+🪨 Stone - My name (Kent Stone)
+🪨 Chain - LLM orchestration
 
-vs LangChain's 50-line LCEL nightmare
+Built like a rock. Zero excuses.
 ```
 
 ```
 6/ Installation:
 
 Option 1: Copy one file
-Option 2: pip install simplechain
+Option 2: pip install stonechain
 
 I recommend Option 1. It's literally one file.
 ```
@@ -125,21 +122,21 @@ I recommend Option 1. It's literally one file.
 ```
 7/ Open Source (MIT License)
 
-GitHub: github.com/KentStone/simplechain
+GitHub: github.com/KentStone/stonechain
 
 Star it. Fork it. Use it. Never touch LangChain again.
 
-Zero dependencies. Zero excuses. Just works. 🚀
+Built like a rock. Zero dependencies. Zero excuses. 🪨
 ```
 
 ### Reddit (r/LocalLLaMA, r/Python, r/MachineLearning)
 
-**Title:** I built a LangChain replacement with ZERO dependencies (800 lines of code)
+**Title:** I built a LangChain replacement with ZERO dependencies (800 lines of code) 🪨
 
 **Body:**
 I got tired of LangChain's 200+ dependencies, 50MB install, and abstraction hell.
 
-So I built SimpleChain - everything you actually need from LangChain in one Python file.
+So I built StoneChain - everything you actually need from LangChain in one Python file.
 
 Features:
 - All major LLM providers (Anthropic, OpenAI, Groq, Mistral, DeepSeek, Ollama)
@@ -149,7 +146,7 @@ Features:
 
 Quick start:
 ```python
-from simplechain import Anthropic, Chain
+from stonechain import Anthropic, Chain
 
 llm = Anthropic()
 print(llm("Hello!"))  # That's it
@@ -157,11 +154,11 @@ print(llm("Hello!"))  # That's it
 
 GitHub: [link]
 
-MIT licensed. Feedback welcome!
+MIT licensed. Built like a rock. 🪨
 
 ### Hacker News
 
-**Title:** SimpleChain: Zero-dependency LangChain replacement in 800 lines
+**Title:** StoneChain: Zero-dependency LangChain replacement in 800 lines
 
 **Text:**
 I built a minimal LLM framework after getting frustrated with LangChain's complexity.
@@ -174,7 +171,7 @@ GitHub: [link]
 
 ### LinkedIn
 
-Just released SimpleChain - an open-source LLM framework that replaces LangChain with zero dependencies.
+Just released StoneChain - an open-source LLM framework that replaces LangChain with zero dependencies.
 
 After months of fighting LangChain's 200+ dependencies, 3-second import times, and callback hell, I decided to build what I actually needed.
 
@@ -186,7 +183,9 @@ Key features:
 • Pure Python stdlib - no external packages
 • MIT licensed
 
-Check it out: github.com/KentStone/simplechain
+Check it out: github.com/KentStone/stonechain
+
+Built like a rock. 🪨
 
 #AI #LLM #Python #OpenSource
 

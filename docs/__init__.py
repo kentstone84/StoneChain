@@ -1,1 +1,1 @@
-# docs/__init__.py
+# StoneChain Docs

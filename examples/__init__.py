@@ -1,1 +1,1 @@
-# examples/__init__.py
+# StoneChain Examples

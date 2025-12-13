@@ -1,15 +1,27 @@
-# Advanced Usage
+# StoneChain Advanced Usage
+
+> This is not a framework for beginners. This is infrastructure for people who understand Python.
+
+## Design Philosophy
+
+StoneChain refuses to hide complexity behind abstractions. If something requires conditional logic, you write Python. If something requires custom retrieval, you subclass and override. There is no DSL. There is no magic.
+
+**What We Refuse To Build:**
+- Domain-specific languages for "chains"
+- Automatic prompt optimization
+- "Safe" agent sandboxing (that's your job)
+- Implicit behavior of any kind
+
+---
 
 ## Custom Providers
 
-SimpleChain makes it easy to add custom LLM providers.
+**If an API speaks OpenAI, StoneChain already supports it.**
 
-### OpenAI-Compatible APIs
-
-Many providers use OpenAI-compatible APIs. Just change the base URL:
+Many providers implement OpenAI-compatible endpoints. You don't need new adapters—just change the base URL:
 
 ```python
-from simplechain import OpenAI
+from stonechain import OpenAI
 
 # Together AI
 together = OpenAI(
@@ -32,20 +44,24 @@ fireworks = OpenAI(
     model="accounts/fireworks/models/llama-v3-70b-instruct"
 )
 
-# Local vLLM
+# Local vLLM server
 vllm = OpenAI(
     api_key="not-needed",
     base_url="http://localhost:8000/v1",
     model="meta-llama/Llama-3-70b"
 )
+
+# Use identically
+response = together("Hello!")
+response = fireworks("Hello!")
 ```
 
-### Custom Adapter
+### Writing a Custom Adapter
 
-For non-OpenAI-compatible APIs:
+For APIs that don't speak OpenAI:
 
 ```python
-from simplechain import LLM, Message, Response, Provider, http
+from stonechain import LLM, Message, Response, Provider, http
 import time
 
 class CustomLLM(LLM):
@@ -66,7 +82,6 @@ class CustomLLM(LLM):
     ) -> Response:
         start = time.perf_counter()
         
-        # Build your API payload
         payload = {
             "model": model or self.default_model,
             "messages": [m.to_dict() for m in messages],
@@ -74,7 +89,6 @@ class CustomLLM(LLM):
             "max_tokens": max_tokens
         }
         
-        # Make request
         data = http.post(
             f"{self.base_url}/chat",
             headers={
@@ -86,7 +100,7 @@ class CustomLLM(LLM):
         
         latency = (time.perf_counter() - start) * 1000
         
-        # Parse response (adjust for your API)
+        # Adjust parsing for your API's response format
         return Response(
             content=data["choices"][0]["message"]["content"],
             model=model or self.default_model,
@@ -102,60 +116,66 @@ llm = CustomLLM(api_key="your-key")
 print(llm("Hello!"))
 ```
 
-## Advanced Chains
+---
 
-### Conditional Steps
+## Conditional Logic Lives in Python
+
+StoneChain chains are sequential by design. There is no built-in conditional execution mechanism. **This is intentional.**
+
+Conditional logic belongs in Python, not in a chain DSL.
 
 ```python
-from simplechain import Anthropic, Chain
+from stonechain import Anthropic, Chain
 
 llm = Anthropic()
 
-def maybe_translate(context):
-    """Only translate if not English."""
-    if "non-english" in context.get("analysis", "").lower():
-        return True
-    return False
-
+# Step 1: Run analysis
 chain = Chain(llm)
 chain.add("analyze", "Analyze the language of: {input}", "analysis")
-chain.add("translate", "Translate to English: {input}", "translated")  # Always runs
-chain.add("summarize", "Summarize: {translated}", "summary")
-
 result = chain.run(input="Bonjour le monde!")
+
+analysis = result["outputs"]["analysis"]
+
+# Step 2: Conditional logic in Python (not in the chain)
+if "french" in analysis.lower() or "non-english" in analysis.lower():
+    translation = llm(f"Translate to English: Bonjour le monde!")
+    print(f"Translated: {translation}")
+else:
+    print(f"Already English: {analysis}")
 ```
 
-### Branching Chains
+For complex routing, use `Router`:
 
 ```python
-from simplechain import Anthropic, Chain, Router
+from stonechain import Anthropic, Router, Chain
 
 llm = Anthropic()
 
-# Technical chain
+# Different chains for different purposes
 tech_chain = Chain(llm, system="You are a technical expert.")
 tech_chain.add("explain", "Explain technically: {input}", "explanation")
-tech_chain.add("example", "Give code example for: {explanation}", "code")
 
-# Simple chain
 simple_chain = Chain(llm, system="Explain like I'm 5.")
 simple_chain.add("explain", "Explain simply: {input}", "explanation")
 
-# Route based on complexity
-router = Router()
-router.add("technical", lambda x: "technical" in x.lower() or "code" in x.lower(), tech_chain)
-router.add("simple", lambda x: "simple" in x.lower() or "eli5" in x.lower(), simple_chain)
+# Route based on input - Python decides which path
+router = Router(default=simple_chain)
+router.add("technical", lambda x: "technical" in x.lower(), tech_chain)
+router.add("code", lambda x: "code" in x.lower(), tech_chain)
 
 result = router.route("Explain recursion technically")
 ```
 
+---
+
 ## Advanced Agents
+
+> ⚠️ **Warning:** Tool execution is user-controlled and intentionally unguarded. Do not expose agents to untrusted input without sandboxing.
 
 ### Multi-Tool Agent
 
 ```python
-from simplechain import Anthropic, Agent, Tool
-import json
+from stonechain import Anthropic, Agent, Tool
 
 def calculator(expression: str) -> str:
     try:
@@ -200,7 +220,7 @@ result = agent.run("Calculate 15*23, then write the result to result.txt")
 ### Custom Agent System Prompt
 
 ```python
-from simplechain import Anthropic, Agent, Tool
+from stonechain import Anthropic, Agent, Tool
 
 tools = [...]
 
@@ -228,12 +248,14 @@ agent = Agent(
 )
 ```
 
-## Advanced RAG
+---
 
-### Custom Retriever
+## RAG Is a Pattern, Not a Product
+
+RAG is retrieval + prompt. Nothing more.
 
 ```python
-from simplechain import Anthropic, RAG, Document
+from stonechain import Anthropic, RAG, Document
 
 class CustomRAG(RAG):
     """RAG with custom retrieval logic."""
@@ -242,14 +264,11 @@ class CustomRAG(RAG):
         # Implement your own retrieval
         # Could use embeddings, BM25, hybrid, etc.
         
-        # Example: TF-IDF-like scoring
         query_terms = set(query.lower().split())
         scored = []
         
         for doc in self.documents:
             doc_terms = set(doc.content.lower().split())
-            
-            # Calculate simple TF-IDF-like score
             overlap = query_terms & doc_terms
             if overlap:
                 tf = len(overlap) / len(doc_terms)
@@ -271,11 +290,10 @@ result = rag.query("Your question")
 ### RAG with Metadata Filtering
 
 ```python
-from simplechain import Anthropic, RAG, Document
+from stonechain import Anthropic, RAG, Document
 
 class FilteredRAG(RAG):
     def query(self, question: str, filter_metadata: dict = None) -> dict:
-        # Filter documents first
         if filter_metadata:
             filtered_docs = [
                 d for d in self.documents
@@ -302,22 +320,12 @@ rag.add([
 result = rag.query("How to use decorators?", filter_metadata={"language": "python"})
 ```
 
-## Streaming (Coming Soon)
-
-```python
-# Planned for v1.1
-from simplechain import Anthropic
-
-llm = Anthropic()
-
-for chunk in llm.stream("Tell me a story"):
-    print(chunk, end="", flush=True)
-```
+---
 
 ## Error Handling
 
 ```python
-from simplechain import Anthropic, APIError, ConfigError
+from stonechain import Anthropic, APIError, ConfigError
 
 try:
     llm = Anthropic()
@@ -333,7 +341,7 @@ except Exception as e:
 ## Retry Logic
 
 ```python
-from simplechain import Anthropic, APIError
+from stonechain import Anthropic, APIError
 import time
 
 def complete_with_retry(llm, prompt, max_retries=3):
@@ -360,11 +368,11 @@ response = complete_with_retry(llm, "Hello!")
 ## Logging
 
 ```python
-from simplechain import Anthropic, Message
+from stonechain import Anthropic, Message
 import logging
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("simplechain")
+logger = logging.getLogger("stonechain")
 
 class LoggingLLM(Anthropic):
     def complete(self, messages, **kwargs):
@@ -376,3 +384,20 @@ class LoggingLLM(Anthropic):
 llm = LoggingLLM()
 llm("Hello!")
 ```
+
+---
+
+## Roadmap
+
+Features under consideration for future versions:
+
+- **Streaming** - Token-by-token output
+- **Function calling** - Native tool use for providers that support it
+- **Structured outputs** - JSON mode enforcement
+- **More providers** - Cohere, Together, Replicate
+
+See [GitHub Issues](https://github.com/KentStone/stonechain/issues) for discussion.
+
+---
+
+Built like a rock. 🪨

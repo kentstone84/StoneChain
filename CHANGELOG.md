@@ -1,12 +1,12 @@
 # Changelog
 
-All notable changes to SimpleChain will be documented here.
+All notable changes to StoneChain will be documented here.
 
 ## [1.0.0] - 2025-12-13
 
 ### Added
 - Initial release
-- Zero-dependency LLM framework
+- Zero-dependency LLM framework - built like a rock
 - Provider adapters:
   - Anthropic Claude
   - OpenAI GPT
@@ -31,3 +31,4 @@ All notable changes to SimpleChain will be documented here.
 - No external dependencies
 - Single file distribution possible
 - Readable in 30 minutes
+- Built like a rock 🪨

@@ -1,6 +1,6 @@
-# Migrating from LangChain to SimpleChain
+# Migrating from LangChain to StoneChain
 
-This guide shows how to migrate your LangChain code to SimpleChain.
+This guide shows how to migrate your LangChain code to StoneChain.
 
 ## Basic Completion
 
@@ -18,9 +18,9 @@ response = llm.invoke(messages)
 print(response.content)
 ```
 
-### SimpleChain
+### StoneChain
 ```python
-from simplechain import Anthropic, Message
+from stonechain import Anthropic, Message
 
 llm = Anthropic()
 response = llm.complete([
@@ -60,9 +60,9 @@ chain = (
 result = chain.invoke("AI trends")
 ```
 
-### SimpleChain
+### StoneChain
 ```python
-from simplechain import Anthropic, Chain
+from stonechain import Anthropic, Chain
 
 llm = Anthropic()
 
@@ -100,9 +100,9 @@ executor = AgentExecutor(agent=agent, tools=tools)
 result = executor.invoke({"input": "What is 15 * 23?"})
 ```
 
-### SimpleChain
+### StoneChain
 ```python
-from simplechain import Anthropic, Agent, Tool
+from stonechain import Anthropic, Agent, Tool
 
 llm = Anthropic()
 
@@ -140,22 +140,22 @@ qa = RetrievalQA.from_chain_type(
     retriever=retriever
 )
 
-result = qa.invoke("What is SimpleChain?")
+result = qa.invoke("What is StoneChain?")
 ```
 
-### SimpleChain
+### StoneChain
 ```python
-from simplechain import Anthropic, RAG, Document
+from stonechain import Anthropic, RAG, Document
 
 llm = Anthropic()
 rag = RAG(llm)
 
 rag.add([
-    Document("SimpleChain is a zero-dependency LLM framework."),
+    Document("StoneChain is a zero-dependency LLM framework."),
     Document("It was created by Kent Stone in 2025."),
 ])
 
-result = rag.query("What is SimpleChain?")
+result = rag.query("What is StoneChain?")
 print(result["answer"])
 ```
 
@@ -176,9 +176,9 @@ chain.invoke({"input": "Hello!"})
 chain.invoke({"input": "What did I just say?"})
 ```
 
-### SimpleChain
+### StoneChain
 ```python
-from simplechain import Anthropic, Conversation
+from stonechain import Anthropic, Conversation
 
 llm = Anthropic()
 conv = Conversation(llm)
@@ -210,9 +210,9 @@ branch = RunnableBranch(
 result = branch.invoke({"input": "Write python code"})
 ```
 
-### SimpleChain
+### StoneChain
 ```python
-from simplechain import Anthropic, Router, Chain
+from stonechain import Anthropic, Router, Chain
 
 llm = Anthropic()
 
@@ -246,9 +246,9 @@ parallel = RunnableParallel(
 # Complex setup required...
 ```
 
-### SimpleChain
+### StoneChain
 ```python
-from simplechain import Anthropic, Parallel
+from stonechain import Anthropic, Parallel
 
 llm = Anthropic()
 
@@ -260,8 +260,8 @@ results = Parallel.run([
 
 ## Key Differences
 
-| Concept | LangChain | SimpleChain |
-|---------|-----------|-------------|
+| Concept | LangChain | StoneChain |
+|---------|-----------|------------|
 | Import | 5+ imports | 1-2 imports |
 | Setup | Complex config | Just API key |
 | Chains | LCEL pipes | Simple `.add()` |
@@ -271,7 +271,7 @@ results = Parallel.run([
 
 ## Migration Checklist
 
-- [ ] Replace `langchain_*` imports with `simplechain`
+- [ ] Replace `langchain_*` imports with `stonechain`
 - [ ] Replace `ChatPromptTemplate` with string templates using `{variable}`
 - [ ] Replace `ConversationBufferMemory` with `Conversation`
 - [ ] Replace `AgentExecutor` with `Agent`
@@ -286,3 +286,7 @@ results = Parallel.run([
 3. **Fewer dependencies** - From 200+ to 0
 4. **Smaller install** - From 50MB+ to 36KB
 5. **Better understanding** - No more abstraction hell
+
+---
+
+Built like a rock. 🪨

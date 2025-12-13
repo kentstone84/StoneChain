@@ -3,7 +3,7 @@
 Build a Code Assistant
 ======================
 
-Example of building a coding assistant with SimpleChain.
+Example of building a coding assistant with StoneChain.
 """
 
 import os
@@ -11,7 +11,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from simplechain import Anthropic, Chain, Agent, Tool, Conversation
+from stonechain import Anthropic, Chain, Agent, Tool, Conversation
 
 
 def code_reviewer():
@@ -38,7 +38,6 @@ Provide:
 3. Suggestions for improvement
 """, "review")
     
-    # Example code to review
     code = '''
 def get_user(user_id):
     query = f"SELECT * FROM users WHERE id = {user_id}"
@@ -139,7 +138,6 @@ def code_debugger():
     def run_python(code: str) -> str:
         """Safely execute Python code."""
         try:
-            # Create a restricted environment
             allowed_builtins = {
                 'print': print,
                 'len': len,
@@ -158,8 +156,6 @@ def code_debugger():
             
             local_vars = {}
             exec(code, {"__builtins__": allowed_builtins}, local_vars)
-            
-            # Return any printed output or variable values
             return f"Executed successfully. Variables: {local_vars}"
         except Exception as e:
             return f"Error: {type(e).__name__}: {e}"

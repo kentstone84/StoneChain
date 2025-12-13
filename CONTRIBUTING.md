@@ -1,12 +1,14 @@
-# Contributing to SimpleChain
+# Contributing to StoneChain
 
-First off, thanks for considering contributing! 🎉
+First off, thanks for considering contributing! 🪨
 
 ## The Golden Rule
 
 **No new dependencies. Ever.**
 
-SimpleChain's entire value proposition is zero dependencies. If your PR adds any external package, it will be rejected. Use Python stdlib only.
+StoneChain's entire value proposition is zero dependencies. If your PR adds any external package, it will be rejected. Use Python stdlib only.
+
+Built like a rock means NO CRACKS.
 
 ## How to Contribute
 
@@ -19,7 +21,7 @@ SimpleChain's entire value proposition is zero dependencies. If your PR adds any
 
 ### Feature Requests
 
-1. Check if it fits the "simple" philosophy
+1. Check if it fits the "solid" philosophy
 2. Can it be done without dependencies?
 3. Open an issue to discuss first
 
@@ -27,7 +29,7 @@ SimpleChain's entire value proposition is zero dependencies. If your PR adds any
 
 1. Fork the repo
 2. Create a branch: `git checkout -b feature/amazing-feature`
-3. Make your changes to `simplechain.py`
+3. Make your changes to `stonechain.py`
 4. Add tests in `tests/`
 5. Run tests: `python -m pytest tests/ -v`
 6. Commit: `git commit -m 'Add amazing feature'`
@@ -49,7 +51,7 @@ SimpleChain's entire value proposition is zero dependencies. If your PR adds any
 python -m pytest tests/ -v
 
 # Run with coverage
-python -m pytest tests/ -v --cov=simplechain
+python -m pytest tests/ -v --cov=stonechain
 
 # Run integration tests (needs API keys)
 ANTHROPIC_API_KEY=sk-ant-... python -m pytest tests/ -v
@@ -76,4 +78,4 @@ Open an issue. We're friendly.
 
 ---
 
-Thanks for keeping it simple! 🚀
+Thanks for keeping it solid! 🪨

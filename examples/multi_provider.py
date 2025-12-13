@@ -8,11 +8,11 @@ Shows how to use different providers and compare them.
 
 import os
 import sys
-import asyncio
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from simplechain import (
+from stonechain import (
     Anthropic, OpenAI, Groq, Mistral, DeepSeek, Ollama,
     Parallel, Message
 )
@@ -28,7 +28,6 @@ def compare_providers():
     
     providers = []
     
-    # Add available providers
     if os.environ.get("ANTHROPIC_API_KEY"):
         providers.append(("Anthropic Claude", Anthropic()))
     
@@ -43,14 +42,6 @@ def compare_providers():
     
     if os.environ.get("DEEPSEEK_API_KEY"):
         providers.append(("DeepSeek", DeepSeek()))
-    
-    # Ollama always available if running
-    try:
-        ollama = Ollama()
-        # Quick test
-        providers.append(("Ollama Local", ollama))
-    except:
-        pass
     
     if not providers:
         print("\nNo providers available. Set API keys:")
@@ -106,7 +97,6 @@ def parallel_comparison():
     
     print(f"\nRunning {len(tasks)} requests in parallel...")
     
-    import time
     start = time.perf_counter()
     results = Parallel.run(tasks)
     total_time = (time.perf_counter() - start) * 1000
@@ -127,7 +117,6 @@ def provider_fallback():
     
     providers = []
     
-    # Order by preference
     if os.environ.get("ANTHROPIC_API_KEY"):
         providers.append(Anthropic())
     if os.environ.get("OPENAI_API_KEY"):
@@ -161,7 +150,7 @@ def cost_estimation():
     print("Cost Estimation")
     print("=" * 70)
     
-    # Approximate costs per 1M tokens (as of late 2024)
+    # Approximate costs per 1M tokens (late 2024 pricing)
     costs = {
         "anthropic": {"input": 3.00, "output": 15.00, "model": "claude-sonnet-4-20250514"},
         "openai": {"input": 5.00, "output": 15.00, "model": "gpt-4o"},
@@ -170,9 +159,8 @@ def cost_estimation():
         "deepseek": {"input": 0.14, "output": 0.28, "model": "deepseek-chat"},
     }
     
-    # Simulate a workload
-    input_tokens = 100000  # 100K input tokens
-    output_tokens = 50000   # 50K output tokens
+    input_tokens = 100000
+    output_tokens = 50000
     
     print(f"\nEstimated costs for {input_tokens:,} input + {output_tokens:,} output tokens:\n")
     

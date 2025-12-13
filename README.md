@@ -1,19 +1,19 @@
-# SimpleChain
+# StoneChain
 
-**The zero-dependency LLM framework. LangChain in 800 lines.**
+**The zero-dependency LLM framework. LangChain in 800 lines. Built like a rock.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Dependencies: None](https://img.shields.io/badge/dependencies-none-green.svg)](https://github.com/KentStone/simplechain)
+[![Dependencies: None](https://img.shields.io/badge/dependencies-none-green.svg)](https://github.com/KentStone/stonechain)
 
 ## Why?
 
 LangChain is bloated. 200+ dependencies. 100,000+ lines. Abstraction hell.
 
-SimpleChain does the same thing in **one file** with **zero dependencies**.
+StoneChain does the same thing in **one file** with **zero dependencies**.
 
-| | LangChain | SimpleChain |
-|--|-----------|-------------|
+| | LangChain | StoneChain |
+|--|-----------|------------|
 | Dependencies | 200+ | **0** |
 | Install size | 50MB+ | **36KB** |
 | Lines of code | 100,000+ | **~800** |
@@ -23,16 +23,16 @@ SimpleChain does the same thing in **one file** with **zero dependencies**.
 
 ```bash
 # Option 1: Copy the file (recommended)
-curl -O https://raw.githubusercontent.com/KentStone/simplechain/main/simplechain.py
+curl -O https://raw.githubusercontent.com/KentStone/stonechain/main/stonechain.py
 
-# Option 2: pip (coming soon)
-pip install simplechain
+# Option 2: pip
+pip install stonechain
 ```
 
 ## Quick Start
 
 ```python
-from simplechain import Anthropic
+from stonechain import Anthropic
 
 # That's it. No config. No setup.
 llm = Anthropic()  # Uses ANTHROPIC_API_KEY env var
@@ -42,7 +42,7 @@ print(llm("What is 2+2?"))  # "4"
 ## Providers
 
 ```python
-from simplechain import Anthropic, OpenAI, Groq, Mistral, DeepSeek, Ollama
+from stonechain import Anthropic, OpenAI, Groq, Mistral, DeepSeek, Ollama
 
 # Cloud providers (need API keys)
 llm = Anthropic()                    # claude-sonnet-4-20250514
@@ -60,7 +60,7 @@ llm = Ollama(model="llama3.2")       # Any Ollama model
 ### Simple Completion
 
 ```python
-from simplechain import Anthropic, Message
+from stonechain import Anthropic, Message
 
 llm = Anthropic()
 
@@ -84,7 +84,7 @@ print(f"Latency: {response.latency_ms}ms")
 ### Chain (Sequential Calls)
 
 ```python
-from simplechain import Anthropic, Chain
+from stonechain import Anthropic, Chain
 
 llm = Anthropic()
 
@@ -100,7 +100,7 @@ print(result["outputs"]["final"])
 ### Router
 
 ```python
-from simplechain import Anthropic, Groq, Router
+from stonechain import Anthropic, Groq, Router
 
 claude = Anthropic()
 groq = Groq()  # Fast but less capable
@@ -116,7 +116,7 @@ result = router.route("Write a complex algorithm")  # -> Claude (smart)
 ### Agent (Tool Use)
 
 ```python
-from simplechain import Anthropic, Agent, Tool
+from stonechain import Anthropic, Agent, Tool
 
 def calculator(expression: str) -> str:
     return str(eval(expression))
@@ -137,24 +137,24 @@ print(result["answer"])  # "352"
 ### RAG (Document Q&A)
 
 ```python
-from simplechain import Anthropic, RAG, Document
+from stonechain import Anthropic, RAG, Document
 
 rag = RAG(Anthropic())
 
 rag.add([
-    Document("SimpleChain was created by Kent Stone in 2025."),
+    Document("StoneChain was created by Kent Stone in 2025."),
     Document("It has zero dependencies and replaces LangChain."),
     Document("The codebase is only 800 lines of Python."),
 ])
 
-result = rag.query("Who created SimpleChain?")
-print(result["answer"])  # "Kent Stone created SimpleChain in 2025."
+result = rag.query("Who created StoneChain?")
+print(result["answer"])  # "Kent Stone created StoneChain in 2025."
 ```
 
 ### Conversation (Memory)
 
 ```python
-from simplechain import Anthropic, Conversation
+from stonechain import Anthropic, Conversation
 
 conv = Conversation(Anthropic(), system="You are a pirate.")
 
@@ -166,7 +166,7 @@ print(conv.chat("What did I just ask?"))  # Remembers context
 ### Parallel Execution
 
 ```python
-from simplechain import Anthropic, OpenAI, Parallel
+from stonechain import Anthropic, OpenAI, Parallel
 
 claude = Anthropic()
 gpt = OpenAI()
@@ -184,7 +184,7 @@ for r in results:
 ### Quick Functions
 
 ```python
-from simplechain import complete, acomplete
+from stonechain import complete, acomplete
 
 # Sync
 response = complete("Hello!", provider="anthropic")
@@ -268,10 +268,16 @@ Pure Python stdlib:
 
 **No requests. No httpx. No aiohttp. Nothing external.**
 
+## Why "StoneChain"?
+
+1. **Stone** - Built solid. No flaky dependencies.
+2. **Stone** - The author's name (Kent Stone)
+3. **Chain** - LLM orchestration
+
 ## Contributing
 
 1. Fork the repo
-2. Make changes to `simplechain.py`
+2. Make changes to `stonechain.py`
 3. Run tests: `python -m pytest tests/`
 4. Submit PR
 
@@ -285,6 +291,8 @@ MIT License - do whatever you want.
 
 Kent Stone ([@KentStone](https://github.com/KentStone))
 
+Creator of [JARVIS Cognitive AI](https://github.com/KentStone/jarvis-pro) and the Stone Retrieval Function (SRF).
+
 ---
 
-**Zero dependencies. Zero excuses. Just works.**
+**Built like a rock. Zero dependencies. Zero excuses.**

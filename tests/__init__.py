@@ -1,1 +1,1 @@
-# Tests for SimpleChain
+# Tests for StoneChain
