@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stonechain"
+version = "1.0.0"
+description = "Zero-dependency LLM framework. LangChain in 800 lines. Built like a rock."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Kent Stone", email = "kent@stoneresearch.ai"}
+]
+maintainers = [
+    {name = "Kent Stone", email = "kent@stoneresearch.ai"}
+]
+keywords = [
+    "llm",
+    "langchain",
+    "ai",
+    "openai",
+    "anthropic",
+    "claude",
+    "gpt",
+    "chatgpt",
+    "ollama",
+    "groq",
+    "mistral",
+    "deepseek",
+    "chain",
+    "agent",
+    "rag",
+    "zero-dependency",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.8"
+dependencies = []  # ZERO DEPENDENCIES - BUILT LIKE A ROCK
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+]
+
+[project.urls]
+Homepage = "https://github.com/KentStone/stonechain"
+Documentation = "https://github.com/KentStone/stonechain#readme"
+Repository = "https://github.com/KentStone/stonechain"
+Issues = "https://github.com/KentStone/stonechain/issues"
+
+[project.scripts]
+stonechain = "stonechain.stonechain:main"
+
+[tool.setuptools]
+packages = ["stonechain"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
