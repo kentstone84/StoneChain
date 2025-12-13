@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Dependencies: None](https://img.shields.io/badge/dependencies-none-green.svg)](https://github.com/KentStone/stonechain)
+[![Core Dependencies: None](https://img.shields.io/badge/core%20deps-none-green.svg)](https://github.com/KentStone/stonechain)
 
 ## Why?
 
@@ -14,7 +14,7 @@ StoneChain does the same thing in **one file** with **zero dependencies**.
 
 | | LangChain | StoneChain |
 |--|-----------|------------|
-| Dependencies | 200+ | **0** |
+| Core dependencies | 200+ | **0** |
 | Install size | 50MB+ | **36KB** |
 | Lines of code | 100,000+ | **~800** |
 | Time to understand | Days | **Minutes** |
@@ -55,62 +55,18 @@ llm = DeepSeek()                     # deepseek-chat
 llm = Ollama(model="llama3.2")       # Any Ollama model
 ```
 
-## Features
-
-### Simple Completion
-
-```python
-from stonechain import Anthropic, Message
-
-llm = Anthropic()
-
-# Shorthand
-response = llm("Explain quantum computing")
-
-# Full control
-response = llm.complete(
-    messages=[
-        Message.system("You are a physicist."),
-        Message.user("Explain quantum computing")
-    ],
-    temperature=0.3,
-    max_tokens=500
-)
-print(response.content)
-print(f"Tokens: {response.total_tokens}")
-print(f"Latency: {response.latency_ms}ms")
-```
+## Core Features
 
 ### Chain (Sequential Calls)
 
 ```python
 from stonechain import Anthropic, Chain
 
-llm = Anthropic()
+chain = Chain(Anthropic())
+chain.add("analyze", "Analyze: {input}", "analysis")
+chain.add("critique", "Critique: {analysis}", "critique")
 
-chain = Chain(llm, system="You are a helpful assistant.")
-chain.add("analyze", "Analyze this topic: {input}", "analysis")
-chain.add("critique", "Critique this analysis: {analysis}", "critique")
-chain.add("synthesize", "Synthesize:\n{analysis}\n{critique}", "final")
-
-result = chain.run(input="Artificial Intelligence")
-print(result["outputs"]["final"])
-```
-
-### Router
-
-```python
-from stonechain import Anthropic, Groq, Router
-
-claude = Anthropic()
-groq = Groq()  # Fast but less capable
-
-router = Router(default=claude)
-router.add("simple", lambda x: len(x) < 50, groq)  # Short queries -> Groq
-router.add("code", lambda x: "code" in x.lower(), claude)  # Code -> Claude
-
-result = router.route("Hi")  # -> Groq (fast)
-result = router.route("Write a complex algorithm")  # -> Claude (smart)
+result = chain.run(input="AI safety")
 ```
 
 ### Agent (Tool Use)
@@ -121,17 +77,10 @@ from stonechain import Anthropic, Agent, Tool
 def calculator(expression: str) -> str:
     return str(eval(expression))
 
-def search(query: str) -> str:
-    return f"Results for: {query}"
-
-tools = [
-    Tool("calculator", "Do math", {"expression": {"type": "string"}}, calculator),
-    Tool("search", "Search web", {"query": {"type": "string"}}, search),
-]
-
-agent = Agent(Anthropic(), tools)
-result = agent.run("What is 15 * 23 + 7?")
-print(result["answer"])  # "352"
+agent = Agent(Anthropic(), [
+    Tool("calculator", "Do math", {"expression": {"type": "string"}}, calculator)
+])
+result = agent.run("What is 15 * 23?")
 ```
 
 ### RAG (Document Q&A)
@@ -140,15 +89,8 @@ print(result["answer"])  # "352"
 from stonechain import Anthropic, RAG, Document
 
 rag = RAG(Anthropic())
-
-rag.add([
-    Document("StoneChain was created by Kent Stone in 2025."),
-    Document("It has zero dependencies and replaces LangChain."),
-    Document("The codebase is only 800 lines of Python."),
-])
-
-result = rag.query("Who created StoneChain?")
-print(result["answer"])  # "Kent Stone created StoneChain in 2025."
+rag.add([Document("StoneChain was created by Kent Stone.")])
+answer = rag.query("Who created StoneChain?")
 ```
 
 ### Conversation (Memory)
@@ -157,131 +99,118 @@ print(result["answer"])  # "Kent Stone created StoneChain in 2025."
 from stonechain import Anthropic, Conversation
 
 conv = Conversation(Anthropic(), system="You are a pirate.")
-
-print(conv.chat("Hello!"))           # "Ahoy, matey!"
-print(conv.chat("What's your name?")) # "They call me Captain Claude!"
-print(conv.chat("What did I just ask?"))  # Remembers context
+print(conv.chat("Hello!"))  # "Ahoy, matey!"
 ```
 
-### Parallel Execution
+## Vector Database Integrations
+
+For production RAG, use `stonechain_vectors.py` with your preferred vector DB:
 
 ```python
-from stonechain import Anthropic, OpenAI, Parallel
+from stonechain import Anthropic
+from stonechain_vectors import VectorRAG, ChromaStore, OpenAIEmbeddings
 
-claude = Anthropic()
-gpt = OpenAI()
-
-# Run in parallel
-results = Parallel.run([
-    (claude, "Explain AI"),
-    (gpt, "Explain AI"),
-])
-
-for r in results:
-    print(f"{r.provider}: {r.content[:100]}...")
-```
-
-### Quick Functions
-
-```python
-from stonechain import complete, acomplete
-
-# Sync
-response = complete("Hello!", provider="anthropic")
-
-# Async
-response = await acomplete("Hello!", provider="openai")
-```
-
-## API Reference
-
-### LLM Classes
-
-All LLM classes share the same interface:
-
-```python
-class LLM:
-    def complete(messages, model=None, temperature=0.7, max_tokens=4096) -> Response
-    async def acomplete(...) -> Response
-    def __call__(prompt) -> str  # Shorthand
-```
-
-### Response Object
-
-```python
-@dataclass
-class Response:
-    content: str           # The response text
-    model: str            # Model used
-    provider: Provider    # Provider enum
-    input_tokens: int     # Tokens in prompt
-    output_tokens: int    # Tokens in response
-    latency_ms: float     # Time taken
-    finish_reason: str    # Why it stopped
-    raw: dict            # Raw API response
-    
-    @property
-    def total_tokens(self) -> int
-    
-    @property
-    def tokens_per_second(self) -> float
-```
-
-### Message Helpers
-
-```python
-Message.system("You are helpful.")
-Message.user("Hello!")
-Message.assistant("Hi there!")
-```
-
-### Tool Definition
-
-```python
-Tool(
-    name="calculator",
-    description="Do math calculations",
-    parameters={"expression": {"type": "string", "description": "Math expression"}},
-    function=lambda expression: eval(expression)
+# Production RAG with Chroma + OpenAI embeddings
+rag = VectorRAG(
+    llm=Anthropic(),
+    store=ChromaStore(persist_directory="./my_db"),
+    embeddings=OpenAIEmbeddings()
 )
+
+rag.add(["Document 1", "Document 2", "Document 3"])
+answer = rag.query("What's in document 1?")
 ```
+
+### Supported Vector Databases
+
+| Database | Install | Usage |
+|----------|---------|-------|
+| **Pinecone** | `pip install pinecone-client` | `PineconeStore(api_key="...", index_name="...")` |
+| **Chroma** | `pip install chromadb` | `ChromaStore(persist_directory="./db")` |
+| **Weaviate** | `pip install weaviate-client` | `WeaviateStore(url="http://localhost:8080")` |
+| **Qdrant** | `pip install qdrant-client` | `QdrantStore(url="http://localhost:6333")` |
+| **Milvus** | `pip install pymilvus` | `MilvusStore(host="localhost")` |
+| **PostgreSQL** | `pip install psycopg2-binary pgvector` | `PgVectorStore(connection_string="...")` |
+
+### Supported Embedding Providers
+
+| Provider | Env Var | Usage |
+|----------|---------|-------|
+| **OpenAI** | `OPENAI_API_KEY` | `OpenAIEmbeddings(model="text-embedding-3-small")` |
+| **Cohere** | `COHERE_API_KEY` | `CohereEmbeddings(model="embed-english-v3.0")` |
+| **Voyage AI** | `VOYAGE_API_KEY` | `VoyageEmbeddings(model="voyage-2")` |
+
+## MCP Support (Model Context Protocol)
+
+StoneChain includes **zero-dependency** MCP support:
+
+### MCP Client
+
+```python
+from stonechain import Anthropic, Agent
+from stonechain_mcp import MCPClient, StdioTransport, HTTPTransport
+
+client = MCPClient({
+    "math": StdioTransport("python", ["math_server.py"]),
+    "weather": HTTPTransport("http://localhost:8000/mcp"),
+})
+
+tools = await client.get_tools()
+agent = Agent(Anthropic(), tools)
+```
+
+### MCP Server (FastMCP Alternative)
+
+```python
+from stonechain_mcp_server import MCPServer
+
+server = MCPServer("Math")
+
+@server.tool()
+def add(a: int, b: int) -> int:
+    """Add two numbers"""
+    return a + b
+
+server.run()
+```
+
+## File Structure
+
+```
+stonechain/
+├── stonechain.py          # Core (zero deps) - LLM, Chain, Agent, RAG
+├── stonechain_vectors.py  # Vector DBs (optional deps) - Pinecone, Chroma, etc.
+├── stonechain_mcp.py      # MCP client (zero deps)
+└── stonechain_mcp_server.py # MCP server (zero deps)
+```
+
+**Philosophy**: Core has zero dependencies. Extensions are optional.
 
 ## Environment Variables
 
 ```bash
+# LLM Providers
 ANTHROPIC_API_KEY=sk-ant-...
 OPENAI_API_KEY=sk-...
 GROQ_API_KEY=gsk_...
 MISTRAL_API_KEY=...
 DEEPSEEK_API_KEY=...
+
+# Embedding Providers (for stonechain_vectors)
+COHERE_API_KEY=...
+VOYAGE_API_KEY=...
 ```
 
-## How It Works
+## Documentation
 
-Pure Python stdlib:
-- `urllib.request` - HTTP calls
-- `json` - Parsing
-- `dataclasses` - Types
-- `asyncio` - Async support
-- `ssl` - HTTPS
-- `concurrent.futures` - Parallelism
-
-**No requests. No httpx. No aiohttp. Nothing external.**
+- [Migration Guide](docs/MIGRATION.md) - Moving from LangChain
+- [Advanced Usage](docs/ADVANCED.md) - Custom providers, agents, RAG
 
 ## Why "StoneChain"?
 
 1. **Stone** - Built solid. No flaky dependencies.
 2. **Stone** - The author's name (Kent Stone)
 3. **Chain** - LLM orchestration
-
-## Contributing
-
-1. Fork the repo
-2. Make changes to `stonechain.py`
-3. Run tests: `python -m pytest tests/`
-4. Submit PR
-
-Keep it simple. No new dependencies. Ever.
 
 ## License
 
@@ -295,4 +224,4 @@ Creator of [JARVIS Cognitive AI](https://github.com/KentStone/jarvis-pro) and th
 
 ---
 
-**Built like a rock. Zero dependencies. Zero excuses.**
+**Built like a rock. Zero dependencies. Zero excuses.** 🪨
