@@ -10,7 +10,7 @@ from unittest.mock import patch, MagicMock
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from simplechain import (
+from stonechain import (
     Message,
     Response,
     Tool,
@@ -24,6 +24,7 @@ from simplechain import (
     Conversation,
     Parallel,
     HTTP,
+    Step,
 )
 
 
@@ -201,8 +202,6 @@ class TestChain:
         assert chain.steps[0].name == "step1"
     
     def test_step_format(self):
-        from simplechain.simplechain import Step
-        
         step = Step("test", "Hello {name}!", "out")
         result = step.format({"name": "World"})
         assert result == "Hello World!"
