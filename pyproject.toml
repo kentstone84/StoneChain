@@ -7,7 +7,7 @@ name = "stonechain"
 version = "1.0.0"
 description = "Zero-dependency LLM framework. LangChain in 800 lines. Built like a rock."
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "Kent Stone", email = "kent@stoneresearch.ai"}
 ]
@@ -35,7 +35,6 @@ keywords = [
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -65,8 +64,8 @@ Issues = "https://github.com/KentStone/stonechain/issues"
 [project.scripts]
 stonechain = "stonechain.stonechain:main"
 
-[tool.setuptools]
-packages = ["stonechain"]
+[tool.setuptools.packages.find]
+where = ["."]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
