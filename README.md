@@ -6,9 +6,6 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Core Dependencies: None](https://img.shields.io/badge/core%20deps-none-green.svg)](https://github.com/KentStone/stonechain)
 
-[![codecov](https://codecov.io/gh/kentstone84/StoneChain/branch/main/graph/badge.svg?token=Z8YEJ6XQ1N)](https://codecov.io/gh/kentstone84/StoneChain)
-
-https://codecov.io/gh/kentstone84/StoneChain/graphs/sunburst.svg?token=Z8YEJ6XQ1N
 
 ## Why?
 
